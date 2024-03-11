@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://vicky582050:9aOGsgCzu2DF@ep-polished-heart-a5c3n1r3.us-east-2.aws.neon.tech/my_neonDb?sslmode=require"
+}
+
+// model User {
+//   id        Int     @id @default(autoincrement())
+//   email     String  @unique
+//   firstName String
+//   lastName  String?
+//   password  String
+// }
+
+// model Todo {
+//   id    Int     @id @default(autoincrement())
+//   title String
+//   done  Boolean @default(false)
+//   user_id  Int
+// }
+
+model Product {
+  id           Int               @id @default(autoincrement())
+  name         String
+  desc         String
+  SKU          String
+  category_id  Int
+  inventory_id Int
+  price        Float
+  discount_id  Int
+  ceated_at    DateTime @default(now())
+  modified_at  DateTime @default(now())
+  deleted_at   DateTime @default(now())
+  category     product_category  @relation(fields: [category_id], references: [id])
+  inventory    product_inventory @relation(fields: [inventory_id], references: [id])
+  discount     product_discount  @relation(fields: [discount_id], references: [id])
+}
+
+model product_category {
+  id          Int       @id @unique @default(autoincrement())
+  name        String
+  desc        String
+  ceated_at   DateTime @default(now())
+  modified_at DateTime @default(now())
+  deleted_at  DateTime @default(now())
+  products    Product[]
+}
+
+model product_inventory {
+  id          Int       @id @unique @default(autoincrement())
+  ceated_at   DateTime @default(now())
+  modified_at DateTime @default(now())
+  deleted_at  DateTime @default(now())
+  products    Product[]
+}
+
+model product_discount {
+  id               Int       @id @unique @default(autoincrement())
+  desc             Int
+  ceated_at        DateTime
+  discount_percent Float
+  active           Boolean
+  modified_at      DateTime @default(now())
+  deleted_at       DateTime @default(now())
+  products         Product[]
+}
